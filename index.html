@@ -3,26 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Letters To No One</title>
+  <title>Letters to No One</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>
-    <h1>Letters To No One</h1>
+    <h1>Letters to No One</h1>
     <p class="subtitle">A quiet journal of places that never stay</p>
   </header>
 
   <main>
-    <article>
-      <h2><a href="posts/home.html">All my life, the idea of home...</a></h2>
-      <p class="excerpt">
-        Everywhere I went, I felt like a guest in my own existence — present, yet never belonging...
-      </p>
-    </article>
+    <p>Loading posts…</p>
   </main>
 
   <footer>
-    <p>© 2025 Fragments of Home · Written by Loki Senpai</p>
+    <p>© 2025 Letters to No One · Written by Loki Senpai</p>
   </footer>
+
+  <script>
+    async function loadPosts() {
+      const container = document.querySelector('main');
+      try {
+        const res = await fetch('posts/posts.json');
+        const posts = await res.json();
+        container.innerHTML = ''; // clear loading text
+        posts.forEach(post => {
+          const article = document.createElement('article');
+          article.innerHTML = `
+            <h2><a href="posts/${post.file}">${post.title}</a></h2>
+            <p class="excerpt">${post.excerpt}</p>
+          `;
+          container.appendChild(article);
+        });
+      } catch (err) {
+        container.innerHTML = '<p>Unable to load posts.</p>';
+        console.error('Error loading posts:', err);
+      }
+    }
+    loadPosts();
+  </script>
 </body>
 </html>
